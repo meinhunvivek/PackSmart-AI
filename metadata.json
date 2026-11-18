@@ -1,0 +1,6 @@
+{
+  "name": "PackSmart - Food Packaging Intelligence",
+  "description": "AI-based intelligent food packaging material recommendation system for the Ministry of Food Processing Industries (MoFPI, India).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

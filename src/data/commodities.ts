@@ -1,0 +1,462 @@
+export interface Commodity {
+  id: string;
+  name: string;
+  hindiName: string;
+  category: 'fresh' | 'dry' | 'dairy' | 'fatty snack' | 'meat' | 'bakery' | 'beverage' | 'frozen';
+  moisture: number; // %
+  fat: number; // %
+  pH: number;
+  respirationRate: number; // mL CO2/kg/h at 10°C (fresh produce)
+  oxygenSensitive: boolean;
+  lightSensitive: boolean;
+  baseShelfLifeDays: number; // baseline days at reference temp in typical unpackaged or basic polybag
+  refTemp: number; // °C
+  q10: number; // shelf life temperature coefficient (typically 2.0 - 2.8)
+  criticalMoisture?: number; // % moisture limit where quality degrades
+  mapGasTarget?: {
+    o2Min: number;
+    o2Max: number;
+    co2Min: number;
+    co2Max: number;
+    n2Balance?: boolean;
+    description: string;
+    hindiDescription?: string;
+  };
+}
+
+export const COMMODITIES: Commodity[] = [
+  {
+    id: 'tomato',
+    name: 'Tomato',
+    hindiName: 'टमाटर',
+    category: 'fresh',
+    moisture: 94,
+    fat: 0.2,
+    pH: 4.4,
+    respirationRate: 20,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 8,
+    refTemp: 12,
+    q10: 2.4,
+    mapGasTarget: {
+      o2Min: 3,
+      o2Max: 5,
+      co2Min: 3,
+      co2Max: 5,
+      n2Balance: true,
+      description: 'O₂ 3-5%, CO₂ 3-5%, Bal N₂ (Prevents chilling injury & delays ripening)',
+      hindiDescription: 'O₂ 3-5%, CO₂ 3-5%, शेष N₂ (पकने में देरी व ताजगी बनाए रखता है)'
+    }
+  },
+  {
+    id: 'banana',
+    name: 'Banana',
+    hindiName: 'केला',
+    category: 'fresh',
+    moisture: 75,
+    fat: 0.3,
+    pH: 5.0,
+    respirationRate: 30,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 6,
+    refTemp: 14,
+    q10: 2.5,
+    mapGasTarget: {
+      o2Min: 3,
+      o2Max: 5,
+      co2Min: 3,
+      co2Max: 5,
+      n2Balance: true,
+      description: 'O₂ 3-5%, CO₂ 3-5%, Bal N₂ (Avoid <2% O₂ to stop anaerobic fermentation)',
+      hindiDescription: 'O₂ 3-5%, CO₂ 3-5%, शेष N₂ (एनेरोबिक किण्वन से बचाएं)'
+    }
+  },
+  {
+    id: 'mango',
+    name: 'Mango',
+    hindiName: 'आम',
+    category: 'fresh',
+    moisture: 82,
+    fat: 0.4,
+    pH: 4.0,
+    respirationRate: 35,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 7,
+    refTemp: 13,
+    q10: 2.5,
+    mapGasTarget: {
+      o2Min: 3,
+      o2Max: 5,
+      co2Min: 3,
+      co2Max: 5,
+      n2Balance: true,
+      description: 'O₂ 3-5%, CO₂ 3-5%, Bal N₂ (Controls anthracnose & softens peel senescence)',
+      hindiDescription: 'O₂ 3-5%, CO₂ 3-5%, शेष N₂ (सड़न नियंत्रण व छिलका सुरक्षा)'
+    }
+  },
+  {
+    id: 'spinach',
+    name: 'Spinach (leafy)',
+    hindiName: 'पालक (हरी पत्तियां)',
+    category: 'fresh',
+    moisture: 91,
+    fat: 0.4,
+    pH: 6.5,
+    respirationRate: 90,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 4,
+    refTemp: 4,
+    q10: 2.7,
+    mapGasTarget: {
+      o2Min: 2,
+      o2Max: 5,
+      co2Min: 5,
+      co2Max: 10,
+      n2Balance: true,
+      description: 'O₂ 2-5%, CO₂ 5-10%, Bal N₂ (Retains chlorophyll, suppresses high respiration)',
+      hindiDescription: 'O₂ 2-5%, CO₂ 5-10%, शेष N₂ (क्लोरोफिल सुरक्षा व श्वसन धीमा)'
+    }
+  },
+  {
+    id: 'capsicum',
+    name: 'Capsicum (Bell Pepper)',
+    hindiName: 'शिमला मिर्च',
+    category: 'fresh',
+    moisture: 92,
+    fat: 0.3,
+    pH: 5.3,
+    respirationRate: 15,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 10,
+    refTemp: 8,
+    q10: 2.3,
+    mapGasTarget: {
+      o2Min: 3,
+      o2Max: 5,
+      co2Min: 3,
+      co2Max: 5,
+      n2Balance: true,
+      description: 'O₂ 3-5%, CO₂ 3-5%, Bal N₂ (Preserves turgidity, prevents calyx rot)',
+      hindiDescription: 'O₂ 3-5%, CO₂ 3-5%, शेष N₂ (कड़कपन व ताजगी बरक़रार)'
+    }
+  },
+  {
+    id: 'apple',
+    name: 'Apple',
+    hindiName: 'सेब',
+    category: 'fresh',
+    moisture: 85,
+    fat: 0.2,
+    pH: 3.5,
+    respirationRate: 8,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 30,
+    refTemp: 2,
+    q10: 2.2,
+    mapGasTarget: {
+      o2Min: 2,
+      o2Max: 3,
+      co2Min: 1,
+      co2Max: 3,
+      n2Balance: true,
+      description: 'O₂ 2-3%, CO₂ 1-3%, Bal N₂ (Controls scald & ethylene biosynthesis)',
+      hindiDescription: 'O₂ 2-3%, CO₂ 1-3%, शेष N₂ (एथिलीन नियंत्रण)'
+    }
+  },
+  {
+    id: 'potato',
+    name: 'Potato',
+    hindiName: 'आलू',
+    category: 'fresh',
+    moisture: 79,
+    fat: 0.1,
+    pH: 6.0,
+    respirationRate: 6,
+    oxygenSensitive: false,
+    lightSensitive: true,
+    baseShelfLifeDays: 45,
+    refTemp: 10,
+    q10: 2.0,
+    mapGasTarget: {
+      o2Min: 18,
+      o2Max: 21,
+      co2Min: 0,
+      co2Max: 1,
+      n2Balance: true,
+      description: 'Normal ventilated air with 100% light barrier to prevent greening (solanine toxicity)',
+      hindiDescription: 'हवादार सामान्य वायु + प्रकाश अवरोधक (सोलेनाइन हरापन रोकथाम)'
+    }
+  },
+  {
+    id: 'strawberry',
+    name: 'Strawberry',
+    hindiName: 'स्ट्रॉबेरी',
+    category: 'fresh',
+    moisture: 91,
+    fat: 0.3,
+    pH: 3.5,
+    respirationRate: 50,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 5,
+    refTemp: 2,
+    q10: 2.6,
+    mapGasTarget: {
+      o2Min: 5,
+      o2Max: 10,
+      co2Min: 15,
+      co2Max: 20,
+      n2Balance: true,
+      description: 'O₂ 5-10%, CO₂ 15-20%, Bal N₂ (High CO₂ strongly inhibits Botrytis cinerea grey mold)',
+      hindiDescription: 'O₂ 5-10%, CO₂ 15-20%, शेष N₂ (फफूंद बोट्रीटिस से तीव्र सुरक्षा)'
+    }
+  },
+  {
+    id: 'wheat-flour',
+    name: 'Wheat flour (Atta)',
+    hindiName: 'गेहूं का आटा',
+    category: 'dry',
+    moisture: 12,
+    fat: 1.5,
+    pH: 6.2,
+    respirationRate: 0,
+    oxygenSensitive: true,
+    lightSensitive: false,
+    baseShelfLifeDays: 90,
+    refTemp: 25,
+    q10: 2.1,
+    criticalMoisture: 14.5,
+  },
+  {
+    id: 'rice-raw',
+    name: 'Rice (raw grain)',
+    hindiName: 'कच्चा चावल',
+    category: 'dry',
+    moisture: 12,
+    fat: 0.6,
+    pH: 6.5,
+    respirationRate: 0,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 180,
+    refTemp: 25,
+    q10: 2.0,
+    criticalMoisture: 14.0,
+  },
+  {
+    id: 'pulses-dal',
+    name: 'Pulses (Dal / Lentils)',
+    hindiName: 'दालें / दलहन',
+    category: 'dry',
+    moisture: 11,
+    fat: 1.5,
+    pH: 6.5,
+    respirationRate: 0,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 180,
+    refTemp: 25,
+    q10: 2.0,
+    criticalMoisture: 13.5,
+  },
+  {
+    id: 'spice-turmeric',
+    name: 'Spice powder (Turmeric)',
+    hindiName: 'हल्दी पाउडर',
+    category: 'dry',
+    moisture: 8,
+    fat: 5,
+    pH: 6.0,
+    respirationRate: 0,
+    oxygenSensitive: true,
+    lightSensitive: true,
+    baseShelfLifeDays: 180,
+    refTemp: 25,
+    q10: 2.2,
+    criticalMoisture: 10.0,
+    mapGasTarget: {
+      o2Min: 0,
+      o2Max: 1,
+      co2Min: 0,
+      co2Max: 0,
+      n2Balance: true,
+      description: '100% N₂ flush (<0.5% residual O₂) with opaque foil barrier to preserve curcumin',
+      hindiDescription: '100% नाइट्रोजन फ्लश + प्रकाशरोधी परत (करक्यूमिन रंग व सुगंध सुरक्षा)'
+    }
+  },
+  {
+    id: 'potato-chips',
+    name: 'Potato chips',
+    hindiName: 'आलू चिप्स',
+    category: 'fatty snack',
+    moisture: 2,
+    fat: 33,
+    pH: 6.0,
+    respirationRate: 0,
+    oxygenSensitive: true,
+    lightSensitive: true,
+    baseShelfLifeDays: 45,
+    refTemp: 25,
+    q10: 2.4,
+    criticalMoisture: 4.5,
+    mapGasTarget: {
+      o2Min: 0,
+      o2Max: 1,
+      co2Min: 0,
+      co2Max: 0,
+      n2Balance: true,
+      description: '99%+ N₂ gas flushing (O₂ < 1.0%) to prevent rancidity and provide cushion pouch',
+      hindiDescription: '99%+ नाइट्रोजन फ्लश (O₂ < 1.0%) दुर्गंध/ऑक्सीकरण रोकथाम और कुशन'
+    }
+  },
+  {
+    id: 'namkeen',
+    name: 'Namkeen / fried snack',
+    hindiName: 'नमकीन / तला हुआ स्नैक',
+    category: 'fatty snack',
+    moisture: 3,
+    fat: 30,
+    pH: 6.0,
+    respirationRate: 0,
+    oxygenSensitive: true,
+    lightSensitive: true,
+    baseShelfLifeDays: 60,
+    refTemp: 25,
+    q10: 2.3,
+    criticalMoisture: 5.0,
+    mapGasTarget: {
+      o2Min: 0,
+      o2Max: 1,
+      co2Min: 0,
+      co2Max: 0,
+      n2Balance: true,
+      description: '99%+ N₂ flush (< 1% O₂) to eliminate lipid oxidation and crunch loss',
+      hindiDescription: '99%+ नाइट्रोजन फ्लश - तेल खराब होने से रोके और कुरकुरापन बचाए'
+    }
+  },
+  {
+    id: 'biscuits',
+    name: 'Biscuits / Cookies',
+    hindiName: 'बिस्कुट / कुकीज़',
+    category: 'bakery',
+    moisture: 4,
+    fat: 15,
+    pH: 6.5,
+    respirationRate: 0,
+    oxygenSensitive: true,
+    lightSensitive: false,
+    baseShelfLifeDays: 90,
+    refTemp: 25,
+    q10: 2.1,
+    criticalMoisture: 6.0,
+  },
+  {
+    id: 'bread',
+    name: 'Bread (sliced loaf)',
+    hindiName: 'ब्रेड (स्लाइस)',
+    category: 'bakery',
+    moisture: 38,
+    fat: 3,
+    pH: 5.5,
+    respirationRate: 0,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 5,
+    refTemp: 22,
+    q10: 2.5,
+    mapGasTarget: {
+      o2Min: 0,
+      o2Max: 1,
+      co2Min: 20,
+      co2Max: 50,
+      n2Balance: true,
+      description: 'CO₂ 20-50% with N₂ balance to inhibit mold and fungal sporulation',
+      hindiDescription: 'CO₂ 20-50% शेष N₂ - फफूंद रोकने और ताजगी के लिए'
+    }
+  },
+  {
+    id: 'milk-pasteurized',
+    name: 'Milk (pasteurized)',
+    hindiName: 'दूध (पाश्चुरीकृत)',
+    category: 'dairy',
+    moisture: 87,
+    fat: 3.5,
+    pH: 6.7,
+    respirationRate: 0,
+    oxygenSensitive: true,
+    lightSensitive: true,
+    baseShelfLifeDays: 3,
+    refTemp: 4,
+    q10: 2.8,
+  },
+  {
+    id: 'paneer',
+    name: 'Paneer (Cottage cheese)',
+    hindiName: 'पनीर',
+    category: 'dairy',
+    moisture: 55,
+    fat: 22,
+    pH: 6.0,
+    respirationRate: 0,
+    oxygenSensitive: true,
+    lightSensitive: false,
+    baseShelfLifeDays: 4,
+    refTemp: 4,
+    q10: 2.7,
+    mapGasTarget: {
+      o2Min: 0,
+      o2Max: 0.5,
+      co2Min: 30,
+      co2Max: 50,
+      n2Balance: true,
+      description: 'CO₂ 30-50%, balance N₂ or vacuum pouch to suppress souring bacteria',
+      hindiDescription: 'CO₂ 30-50% शेष N₂ या वैक्यूम पाउच - खट्टापन रोकने हेतु'
+    }
+  },
+  {
+    id: 'chicken-fresh',
+    name: 'Chicken (fresh meat)',
+    hindiName: 'चिकन (ताज़ा मांस)',
+    category: 'meat',
+    moisture: 70,
+    fat: 5,
+    pH: 6.2,
+    respirationRate: 0,
+    oxygenSensitive: true,
+    lightSensitive: false,
+    baseShelfLifeDays: 3,
+    refTemp: 2,
+    q10: 2.9,
+    mapGasTarget: {
+      o2Min: 60,
+      o2Max: 80,
+      co2Min: 20,
+      co2Max: 40,
+      n2Balance: false,
+      description: 'High-O₂ MAP (70% O₂ + 30% CO₂) for red oxymyoglobin bloom, or Vacuum Skin Pack (VSP)',
+      hindiDescription: 'उच्च O₂ (70% O₂ + 30% CO₂) रंग बनाए रखने हेतु, या वैक्यूम स्किन पैक'
+    }
+  },
+  {
+    id: 'frozen-peas',
+    name: 'Frozen peas',
+    hindiName: 'जमी हुई मटर (फ्रोजन मटर)',
+    category: 'frozen',
+    moisture: 78,
+    fat: 0.4,
+    pH: 6.5,
+    respirationRate: 0,
+    oxygenSensitive: false,
+    lightSensitive: false,
+    baseShelfLifeDays: 180,
+    refTemp: -18,
+    q10: 2.0,
+    criticalMoisture: 82.0,
+  }
+];
